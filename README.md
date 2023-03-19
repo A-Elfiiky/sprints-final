@@ -8,31 +8,41 @@ The objective of the DevOps Bootcamp Capstone Project is to build a completely a
 ## Prerequisites
 
 Prerequisites:
-✅ Git
-✅ Terraform
-✅ Ansible
-✅ Docker
-✅ Docker Compose
-✅ Kubernetes
-✅ AWS
-✅ Jenkins
+\\
+ Git
+\\
+Terraform
+\\
+Ansible
+\\
+Docker
+\\
+Docker Compose
+\\
+Kubernetes
+\\
+AWS
+\\
+Jenkins
 
 -----------------------------------------------------------------------------------------------
 
 ## Project setup
 
-1- clone the repo to your local machine.
-2- run the below commands to let Terraform create the needed infra
+- clone the repo to your local machine.
+- run the below commands to let Terraform create the needed infra
 
->terrafrom init 
->terraform plan 
->terraform apply | terraform apply --auto-approve 
+> terrafrom init 
+\\
+> terraform plan
+\\ 
+> terraform apply | terraform apply --auto-approve 
 
-3- Run the below commands to use ansible playbook to dow the follwoing.
+- Run the below commands to use ansible playbook to dow the follwoing.
 
-Install Jenkins on EC2
-Configure Jenkins access
-Install dependence / plugins (Docker , aws cli , Kubectl , ETC)
+    - Install Jenkins on EC2
+    - Configure Jenkins access
+    - Install dependence / plugins (Docker , aws cli , Kubectl , ETC)
 
  - anible-playbook -i Inventory-name --private-key key-name playbook.yml
  - ansible-playbook -i '123.123.123.123,' -u ubuntu --private-key / keypair.pem /ansible123.yml
@@ -42,7 +52,7 @@ Install dependence / plugins (Docker , aws cli , Kubectl , ETC)
  - add aws credentials as a secret text (secert key , access key ,...)
 add Github token
 
-4- To run the web application and its database, navigate to the flask_app directory and execute "docker compose up" command. Once you have completed the preceding steps, you can then execute the pipeline.
+- To run the web application and its database, navigate to the flask_app directory and execute "docker compose up" command. Once you have completed the preceding steps, you can then execute the pipeline.
 
 ------------------------------------------------------------
 ## Project summry
@@ -73,6 +83,12 @@ Another challenge faced was configuring EC2 instance and integrating it with EKS
 - https://aws.amazon.com/premiumsupport/knowledge-center/amazon-eks-cluster-access/
 - https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html
 ----------------------------------------------------------
+## Future work 
+Monitor the instance, web app and DB by any monitoring tool >> prometheus. 
+\\ 
+Auto backup the jenkins configuration / installation to github to save the initialization time.
+
+------------------------------------------------------------------------------------
 ## Refrances links
 
 - Creating the Amazon EBS CSI driver IAM role for service accounts https://docs.aws.amazon.com/eks/latest/userguide/csi-iam-role.html
