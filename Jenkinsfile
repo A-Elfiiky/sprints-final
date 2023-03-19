@@ -50,7 +50,11 @@ pipeline {
                     kubectl apply -f $PWD/kubernetes_manifest_file
                     '''
                 }
+<<<<<<< HEAD
                 }  
+=======
+                //}    
+>>>>>>> 0bdb0e6a68687c86927aef4506542f50139e0e38
             }
         }
         stage('INGRESS and LB URL 🚀 🎉 ') {
