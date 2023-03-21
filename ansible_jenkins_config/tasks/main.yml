@@ -3,8 +3,6 @@
   hosts:  all
   gather_facts: false
   become: true
-  vars_files:
-    - ../vars.yml
   tasks:
     - name: Task Update APT package manager repositories cache
       become: true
@@ -56,8 +54,8 @@
     - name: Install plugin
       community.general.jenkins_plugin:
         name: "{{ item }}"
-        url_username: "{{ jenkins_admin_username }}"
-        url_password: "{{ jenkins_admin_username }}"
+        url_username: "admin"
+        url_password: "admin"
         url: http://localhost:8080
         timeout: "10000"
         state: latest

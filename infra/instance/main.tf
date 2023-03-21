@@ -139,9 +139,11 @@ resource "aws_security_group" "ssh-allowed" {
   }
 }
 
-resource "null_resource" "jenkins_install" {
-  provisioner "local-exec" {
-    command = "ansible-playbook -i '${aws_instance.jenkins-instance.public_ip},' -u ubuntu --private-key /home/ahmed/.aws/final.pem /home/ahmed/sprints-fin/ansible_jenkins_config/tasks/main.yml"
-  }
-  depends_on = [aws_instance.jenkins-instance, ]
-}
+# resource "null_resource" "jenkins_install" {
+#   provisioner "local-exec" {
+#     command = "ansible-playbook -i '${aws_instance.jenkins-instance.public_ip},' -u ubuntu --private-key /home/ahmed/.aws/final.pem /home/ahmed/sprints-fin/ansible_jenkins_config/tasks/main.yml"
+#   }
+#   depends_on = [aws_instance.jenkins-instance, ]
+# }
+
+# ansible-playbook -i '3.231.227.17,' -u ubuntu --private-key /home/ahmed/.aws/final.pem /home/ahmed/sprints-fin/ansible_jenkins_config/tasks/main.yml
