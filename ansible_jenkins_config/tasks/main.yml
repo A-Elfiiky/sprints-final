@@ -51,6 +51,30 @@
     - name: Restart Jenkins
       service: name=jenkins state=restarted
 
+    - name: Install AWS cli url
+      shell: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+    - name: Unarchieve AWS-cli.zip
+      unarchive:
+        src: awscliv2.zip
+        dest: /home/ubuntu
+        remote_src: yes
+
+    - name: Install AWS cli
+      shell: "./aws/install"    
+
+    - name: Install Kubectl url
+      shell: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    
+    - name: install Kubectl
+      shell: install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      become: yes
+
+    - name: Giving Jenkins Access to docker.sock  
+      shell: setfacl --modify user:jenkins:rw /var/run/docker.sock
+      become: yes  
+
+
     - name: Install plugin
       community.general.jenkins_plugin:
         name: "{{ item }}"
