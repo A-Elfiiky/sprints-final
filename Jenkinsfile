@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout external proj 🙈🙈🙈') {
             steps {
-                git url: 'https://github.com/A-Elfiiky/sprints-final.git', branch: 'main' , credentialsId: 'git-credential'
+                git url: 'https://github.com/A-Elfiiky/sprints-final.git', branch: 'main' , credentialsId: 'github'
             }
         }
         stage('Build Docker image Python app and push to ecr 🚚📌') {
