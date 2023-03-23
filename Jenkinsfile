@@ -51,7 +51,7 @@ pipeline {
                     '''
                 }
                 //}    
-            }`
+            }
         }
         stage('INGRESS and LB URL 🚀 🎉 ') {
             steps{       
