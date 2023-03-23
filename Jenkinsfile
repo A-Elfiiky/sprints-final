@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout external proj 🙈🙈🙈') {
             steps {
-                git url: 'https://github.com/A-Elfiiky/sprints-final.git', branch: 'main' , credentialsId: 'git-credential'
+                git url: 'https://github.com/A-Elfiiky/sprints-final.git', branch: 'main' , credentialsId: 'github'
             }
         }
         stage('Build Docker image Python app and push to ecr 🚚📌') {
@@ -41,17 +41,17 @@ pipeline {
 
         stage('Apply Kubernetes files 🚀 🎉 ') {
             steps{
-                // withKubeConfig([credentialsId: 'token-eks', serverUrl: 'https://D4D5B42935A6DD8ECD6B3991146B1233.gr7.us-east-1.eks.amazonaws.com']) {
+            withCredentials([string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY'), string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID')]) {
                 script {
                     sh '''
                     sed -i \"s|image:.*|image: 612386077301.dkr.ecr.us-east-1.amazonaws.com/python_app:app_"$BUILD_NUMBER"|g\" `pwd`/kubernetes_manifest_file/deployment_flaskapp.yml
                     sed -i \"s|image:.*|image: 612386077301.dkr.ecr.us-east-1.amazonaws.com/python_db:db_"$BUILD_NUMBER"|g\" `pwd`/kubernetes_manifest_file/statefulSet_flaskdb.yml
-                    aws eks update-kubeconfig --region us-east-1 --name eks
+                    aws eks --region us-east-1 update-kubeconfig --name eks
                     kubectl apply -f $PWD/kubernetes_manifest_file
                     '''
                 }
-                //}    
-            }`
+                }  
+            }
         }
         stage('INGRESS and LB URL 🚀 🎉 ') {
             steps{       

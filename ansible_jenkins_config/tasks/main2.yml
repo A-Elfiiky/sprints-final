@@ -51,8 +51,8 @@
     - name: Restart Jenkins
       service: name=jenkins state=restarted
 
-    # - name: Install AWS cli url
-    #   shell: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    - name: Install AWS cli url
+      shell: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 
     # - name: Unarchieve AWS-cli.zip
     #   unarchive:
@@ -63,17 +63,22 @@
     # - name: Install AWS cli
     #   shell: "./aws/install"    
 
-    # - name: Install Kubectl url
-    #   shell: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    - name: Install Kubectl url
+      shell: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
     
-    # - name: install Kubectl
-    #   shell: install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-    #   become: yes
+    - name: install Kubectl
+      shell: install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      become: yes
 
     # - name: Giving Jenkins Access to docker.sock  
     #   shell: setfacl --modify user:jenkins:rw /var/run/docker.sock
     #   become: yes  
 
+
+    - name: Set permissions on /var/run/docker.sock
+      become: true
+      command:
+        cmd: "chmod 666 /var/run/docker.sock"
 
     - name: Install plugin
       community.general.jenkins_plugin:
@@ -184,35 +189,3 @@
     #     url: "http://3.231.56.123:8080/"
     #     url_username: "{{ jenkins_admin_username }}"
     #     url_password: "{{ jenkins_admin_password }}"
-
-    ---
-    - name: Install kubectl and modify aws-auth ConfigMap
-      become: true
-      vars:
-        kubectl_version: 1.24.10
-      tasks:
-        - name: Download kubectl binary
-          command:
-            cmd: "curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/{{ kubectl_version }}/2023-01-30/bin/linux/amd64/kubectl"
-            chdir: "/tmp"
-          register: download_kubectl_result
-
-        - name: Make kubectl binary executable
-          command:
-            cmd: "chmod +x ./kubectl"
-            chdir: "/tmp"
-          when: download_kubectl_result is succeeded
-
-        - name: Move kubectl binary to $HOME/bin and add it to PATH
-          shell: |
-            mkdir -p $HOME/bin && cp /tmp/kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-          when: download_kubectl_result is succeeded
-
-        - name: Verify kubectl version
-          command:
-            cmd: "kubectl version --short --client"
-          when: download_kubectl_result is succeeded
-
-        - name: Edit aws-auth ConfigMap
-          command:
-            cmd: "kubectl edit configmap aws-auth --namespace kube-system"

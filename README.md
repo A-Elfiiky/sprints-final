@@ -1,9 +1,9 @@
-Summary
+## Summary
 
 Web application using modern cloud technologies such as Terraform, AWS EKS, Docker, and Kubernetes. created an EKS cluster, configured an EC2 instance for Jenkins, and created an ECR to store Docker images. I used Ansible to install and configure Jenkins, added AWS and Kubernetes credentials, and created Docker images and compose files for the web application and database. then created Kubernetes files, including a deployment file for the web application and a stateful set for the MySQL database, using PV and PVCs. I also set up an Ingress using NGINX and installed the NGINX Ingress controller. Finally, configured Jenkins using pipeline as code to build and deploy the web application to Kubernetes on every push to GitHub, with output of the website URL.
 
 ------------------------------------------------------------
-Terraform
+## Terraform
 Terraform will create the EC2 instance, ECR , and EKS.
 
 - Commands 
@@ -13,7 +13,7 @@ Terraform will create the EC2 instance, ECR , and EKS.
 
 ----------------------------------------------------------
 
-Ansible
+## Ansible
 Install Jenkins on EC2
 Configure Jenkins access
 Install dependence / plugins (Docker , aws cli , Kubectl , ETC)
@@ -21,7 +21,7 @@ Install dependence / plugins (Docker , aws cli , Kubectl , ETC)
 
 -------------------------------------------------------------
 
-apply Kuberentes Mainfest
+## apply Kuberentes Mainfest
 kubectl apply -f [all mainfest ]
 
 -log in to EKS
@@ -42,7 +42,7 @@ docker push public.ecr.aws/y1x1a8h4/flask-app:latest
 
 -----------------------------------
 
-Jenkins >> CICD 
+## Jenkins >> CICD 
 add credential Dashboard > Manage Jenkins > Credentials > system > Global credentials (unrestricted) + Add Credentials
 add (secert key , access key ,...)
 add Github token
