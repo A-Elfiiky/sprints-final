@@ -51,30 +51,7 @@
     - name: Restart Jenkins
       service: name=jenkins state=restarted
 
-    # - name: Install AWS cli url >> fail
-    #   shell: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-
-    # - name: Unarchieve AWS-cli.zip
-    #   unarchive:
-    #     src: awscliv2.zip
-    #     dest: /home/ubuntu
-    #     remote_src: yes
-
-    # - name: Install AWS cli
-    #   shell: "./aws/install"    
-
-    # - name: Install Kubectl url
-    #   shell: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-    
-    # - name: install Kubectl
-    #   shell: install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-    #   become: yes
-
-    # - name: Giving Jenkins Access to docker.sock  
-    #   shell: setfacl --modify user:jenkins:rw /var/run/docker.sock
-    #   become: yes  
-
-
+      
     - name: Install plugin
       community.general.jenkins_plugin:
         name: "{{ item }}"
@@ -181,38 +158,50 @@
     #   jenkins_plugin:
     #     name: kubernetes
     #     state: present
-    #     url: "http://3.231.56.123:8080/"
+    #     url: "http://localhost:8080/"
     #     url_username: "{{ jenkins_admin_username }}"
     #     url_password: "{{ jenkins_admin_password }}"
 
-    ---
-    - name: Install kubectl and modify aws-auth ConfigMap
+    # - name: Adding jenkins user to group docker
+    #   user:
+    #     name: jenkins
+    #     groups: ["docker"]
+    #     append: yes
+
+    - name: Install Docker
       become: true
-      vars:
-        kubectl_version: 1.24.10
-      tasks:
-        - name: Download kubectl binary
-          command:
-            cmd: "curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/{{ kubectl_version }}/2023-01-30/bin/linux/amd64/kubectl"
-            chdir: "/tmp"
-          register: download_kubectl_result
+      apt:
+        name: docker.io
+        state: present
 
-        - name: Make kubectl binary executable
-          command:
-            cmd: "chmod +x ./kubectl"
-            chdir: "/tmp"
-          when: download_kubectl_result is succeeded
+    - name: Add users to docker group
+      become: true
+      shell: |
+        sudo usermod -aG docker $USER
+        sudo usermod -aG docker jenkins
 
-        - name: Move kubectl binary to $HOME/bin and add it to PATH
-          shell: |
-            mkdir -p $HOME/bin && cp /tmp/kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-          when: download_kubectl_result is succeeded
+    - name: check permission of  /var/run/docker.sock
+      file: 
+        path: /var/run/docker.sock
+        mode: '0777'
 
-        - name: Verify kubectl version
-          command:
-            cmd: "kubectl version --short --client"
-          when: download_kubectl_result is succeeded
+    # - name: Install Kubectl url
+    #   shell: curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.24.10/2023-01-30/bin/linux/amd64/kubectl
 
-        - name: Edit aws-auth ConfigMap
-          command:
-            cmd: "kubectl edit configmap aws-auth --namespace kube-system"
+    - name: Download and install kubectl
+      become: true
+      shell: |
+        curl -LO https://s3.us-west-2.amazonaws.com/amazon-eks/1.24.10/2023-01-30/bin/linux/amd64/kubectl
+        chmod +x ./kubectl
+        mkdir -p $HOME/bin
+        cp ./kubectl $HOME/bin/kubectl
+        export PATH=$PATH:$HOME/bin
+
+    - name: Install AWS CLI
+      become: true
+      shell: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        apt-get update && apt-get install -y unzip
+        unzip awscliv2.zip
+        ./aws/install --update
+
