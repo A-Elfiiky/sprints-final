@@ -3,26 +3,28 @@
 The objective of the DevOps Bootcamp Capstone Project is to build a completely automated CI/CD pipeline for a web application that runs on Kubernetes. The project employs a variety of technologies and tools, including Terraform, Ansible, Docker, and Kubernetes, to accomplish this goal.
 
 
+![Sprints - Projects](https://user-images.githubusercontent.com/117025440/227776241-f5384b3d-fa9b-4bba-b0a9-254a11e7609d.jpeg)
+
 
 ---------------------------------------------------------------------------------------------
 ## Prerequisites
 
 Prerequisites:
-\\
- Git
-\\
+
+Git
+
 Terraform
-\\
+
 Ansible
-\\
+
 Docker
-\\
+
 Docker Compose
-\\
+
 Kubernetes
-\\
+
 AWS
-\\
+
 Jenkins
 
 -----------------------------------------------------------------------------------------------
@@ -33,9 +35,9 @@ Jenkins
 - run the below commands to let Terraform create the needed infra
 
 > terrafrom init 
-\\
+
 > terraform plan
-\\ 
+
 > terraform apply | terraform apply --auto-approve 
 
 - Run the below commands to use ansible playbook to dow the follwoing.
@@ -44,10 +46,9 @@ Jenkins
     - Configure Jenkins access
     - Install dependence / plugins (Docker , aws cli , Kubectl , ETC)
 
- - anible-playbook -i Inventory-name --private-key key-name playbook.yml
- - ansible-playbook -i '123.123.123.123,' -u ubuntu --private-key / keypair.pem /ansible123.yml
-
- - ansible-playbook -i '3.231.227.17,' -u ubuntu --private-key /home/ahmed/.aws/final.pem /home/ahmed/sprints-fin/ansible_jenkins_config/tasks/main.yml
+ > anible-playbook -i Inventory-name --private-key key-name playbook.yml
+ > ansible-playbook -i '123.123.123.123,' -u ubuntu --private-key / keypair.pem /ansible123.yml
+ > ansible-playbook -i '3.231.227.17,' -u ubuntu --private-key /home/ahmed/.aws/final.pem /home/ahmed/sprints-fin/ansible_jenkins_config/tasks/main.yml
 
  - add aws credentials as a secret text (secert key , access key ,...)
 add Github token
@@ -85,7 +86,8 @@ Another challenge faced was configuring EC2 instance and integrating it with EKS
 ----------------------------------------------------------
 ## Future work 
 Monitor the instance, web app and DB by any monitoring tool >> prometheus. 
-\\ 
+
+
 Auto backup the jenkins configuration / installation to github to save the initialization time.
 
 ------------------------------------------------------------------------------------
